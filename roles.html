@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Breaking Point - Roles de Combate</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1c1c1c; 
+            color: #d0d0d0; 
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow: hidden; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Roboto Condensed', sans-serif; 
+            text-transform: uppercase;
+            letter-spacing: 3px; 
+            color: #f0f0f0;
+            font-weight: 700;
+        }
+
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            padding: 20px 20px 100px; 
+            box-sizing: border-box;
+            flex-grow: 1;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .main-title {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            color: #f5f5f5;
+            position: relative;
+        }
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background-color: #556b2f; 
+            box-shadow: 0 0 10px #556b2f;
+            border-radius: 2px;
+        }
+
+        .factions-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 95%;
+            height: auto;
+            max-height: calc(100vh - 200px); 
+            overflow: hidden; 
+        }
+
+        .faction-section {
+            flex: 1;
+            padding: 0 25px; 
+            text-align: center;
+        }
+
+        .vertical-separator {
+            width: 5px;
+            height: 100%; 
+            min-height: 400px; 
+            background: linear-gradient(to bottom, #007bff, #1c1c1c, #dc3545); 
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin: 0 20px;
+        }
+
+        .faction-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+        }
+        .faction-title.coalicion {
+            color: #007bff; 
+        }
+        .faction-title.rebeldes {
+            color: #dc3545; 
+        }
+
+        .roles-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px;
+            padding: 0;
+            list-style: none; 
+        }
+        .role-card {
+            background-color: #222222;
+            border: 2px solid #444;
+            border-radius: 5px;
+            padding: 15px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+            min-height: 200px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .role-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+            border-color: #556b2f;
+        }
+        .faction-section:first-child .role-card.selected {
+             border: 3px solid #007bff; 
+             box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+        }
+        .faction-section:last-child .role-card.selected {
+             border: 3px solid #dc3545; 
+             box-shadow: 0 0 15px rgba(220, 53, 69, 0.7);
+        }
+
+        .role-card img {
+            width: 100%;
+            height: auto;
+            max-height: 120px; 
+            object-fit: contain;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #444;
+            flex-shrink: 0; 
+        }
+        .role-card h3 {
+            font-size: 1.4em;
+            margin: 0; 
+            color: #7c9a51; 
+            flex-shrink: 0; 
+        }
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            z-index: 10;
+        }
+        .nav-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: #556b2f; 
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); 
+            font-size: 1em; 
+        }
+        .nav-button:hover {
+            background-color: #7c9a51; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 1200px) {
+             .roles-gallery {
+                grid-template-columns: 1fr; 
+             }
+             .role-card {
+                 min-height: 200px;
+             }
+        }
+        @media (max-width: 992px) {
+            .factions-container {
+                flex-direction: column;
+                overflow-y: auto; 
+                max-height: calc(100vh - 150px);
+            }
+            .vertical-separator {
+                display: none;
+            }
+            .faction-section {
+                padding: 10px 10px;
+            }
+            .roles-gallery {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .role-card {
+                width: 90%;
+                margin: 0 auto;
+                min-height: auto;
+                padding: 10px; 
+            }
+            .role-card img {
+                max-height: 100px; 
+                margin-bottom: 5px;
+            }
+            .role-card h3 {
+                font-size: 1.2em;
+            }
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+                bottom: 15px;
+            }
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-content-wrapper">
+        <h2 class="main-title">Roles de Combate</h2>
+
+        <div class="factions-container">
+            <div class="faction-section">
+                <h2 class="faction-title coalicion">Fuerzas de Coalición</h2>
+                <div class="roles-gallery">
+                    <div class="role-card" data-role="comando-asalto">
+                        <img src="Pjs/Comando.png" alt="Comando de Asalto">
+                        <h3>Asalto</h3>
+                    </div>
+                    <div class="role-card" data-role="reconocimiento">
+                        <img src="Pjs/Francotirador.png" alt="Reconocimiento">
+                        <h3>Reconocimiento</h3>
+                    </div>
+                    <div class="role-card" data-role="ingeniero">
+                        <img src="Pjs/Fuego-Rapido.png" alt="Ingeniero de Combate">
+                        <h3>Fuego Pesado</h3>
+                    </div>
+                    <div class="role-card" data-role="apoyo-médico">
+                        <img src="Pjs/Asalto.png" alt="Apoyo Médico">
+                        <h3>Fuego Rapido</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vertical-separator"></div>
+
+            <div class="faction-section">
+                <h2 class="faction-title rebeldes">Fuerzas Rebeldes</h2>
+                <div class="roles-gallery">
+                    <div class="role-card" data-role="infiltrador">
+                        <img src="Pjs/Cabezilla.png" alt="Infiltrador">
+                        <h3>Infiltrador</h3>
+                    </div>
+                    <div class="role-card" data-role="artillero-pesado">
+                        <img src="Pjs/Explosivos.png" alt="Artillero Pesado">
+                        <h3>Artillero Pesado</h3>
+                    </div>
+                    <div class="role-card" data-role="zapador">
+                        <img src="Pjs/Artillero.png" alt="Zapador">
+                        <h3>Zapador</h3>
+                    </div>
+                    <div class="role-card" data-role="táctico">
+                        <img src="Pjs/Fuego-Pesado.png" alt="Táctico">
+                        <h3>Guerrillero</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="vehiculos.html" class="nav-button">← Anterior</a>
+        <a href="final.html" class="nav-button">Siguiente →</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const roleCards = document.querySelectorAll('.role-card');
+            
+            roleCards.forEach(card => {
+                const roleId = card.getAttribute('data-role');
+                const faction = card.closest('.faction-section').querySelector('.faction-title').classList.contains('coalicion') ? 'Coalición' : 'Rebeldes';
+                
+                if (localStorage.getItem('selectedRole') === roleId) {
+                    card.classList.add('selected');
+                }
+
+                card.addEventListener('click', () => {
+                    roleCards.forEach(otherCard => {
+                        otherCard.classList.remove('selected');
+                    });
+                    
+                    card.classList.add('selected');
+                    
+                    localStorage.setItem('selectedRole', roleId);
+                    localStorage.setItem('selectedFaction', faction);
+                    console.log(`Rol seleccionado: ${roleId} (${faction})`);
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>

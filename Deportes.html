@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deportes - Hotel California</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004d6a; 
+            --secondary-color: #f5b95a; 
+            --dark-color: #1e1e1e;
+            --light-color: #f0f3f5;
+            --text-color: #444;
+            --light-text-color: #ccc;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: padding 0.3s;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-right: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 10px 18px;
+            border-radius: 25px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+
+        .nav a:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 100px 20px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 5px;
+            background-color: var(--secondary-color);
+            margin: 10px auto 0;
+            border-radius: 5px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .seccion-deportes {
+            background-color: #fff;
+            padding-top: 120px;
+        }
+
+        .deportes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .deporte-card {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .deporte-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .deporte-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .deporte-card .card-content {
+            padding: 25px;
+            text-align: left;
+        }
+
+        .deporte-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .deporte-card p {
+            font-size: 0.95rem;
+            color: #666;
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 50px;
+        }
+
+        .footer h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+
+        .footer p {
+            margin: 5px 0;
+            color: var(--light-text-color);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 15px;
+                position: static;
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 15px;
+                margin-right: 0;
+            }
+
+            .nav a {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Hotel California</h1>
+        <nav class="nav">
+            <a href="index.html">Inicio</a>
+            <a href="Habitaciones.html">Habitaciones</a>
+            <a href="Servicios.html">Servicios</a>
+            <a href="Gastronomia.html">Gastronomía</a>
+            <a href="Deportes.html">Deportes</a>
+            <a href="index.html#contacto">Contacto</a>
+            <a href="Reservas.html">Reservas</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="seccion-deportes">
+            <h2>Deportes de Aventura</h2>
+            <div class="deportes-grid">
+                <div class="deporte-card">
+                    <img src="img/Rafting.png" alt="Rafting en el río Fonce">
+                    <div class="card-content">
+                        <h3>Rafting</h3>
+                        <p>Navega por los rápidos del río Fonce y siente la adrenalina en una experiencia inolvidable. ¡Ideal para principiantes y expertos!</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Parapente.png" alt="Parapente en el Cañón del Chicamocha">
+                    <div class="card-content">
+                        <h3>Parapente</h3>
+                        <p>Vuela sobre el impresionante Cañón del Chicamocha y disfruta de vistas panorámicas que te quitarán el aliento.</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Canoying.png" alt="Canyoning en las cascadas">
+                    <div class="card-content">
+                        <h3>Canyoning</h3>
+                        <p>Desciende por cañones y cascadas naturales con la guía de expertos. Una aventura refrescante y emocionante.</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Bungee.png" alt="Bungee Jumping">
+                    <div class="card-content">
+                        <h3>Bungee Jumping</h3>
+                        <p>Lánzate desde un puente de 70 metros de altura sobre el río Fonce. La descarga de adrenalina más pura.</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Espeologia.png" alt="Espeleología">
+                    <div class="card-content">
+                        <h3>Espeleología</h3>
+                        <p>Explora las fascinantes cuevas de la región, como la Cueva del Indio. Una aventura subterránea única.</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Senderismo.png" alt="Senderismo">
+                    <div class="card-content">
+                        <h3>Senderismo y Trekking</h3>
+                        <p>Recorre los senderos ecológicos que conectan San Gil con pueblos mágicos como Barichara y Guane.</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Canotaje.png" alt="Canotaje">
+                    <div class="card-content">
+                        <h3>Canotaje</h3>
+                        <p>Disfruta de un tranquilo paseo en canoa por las aguas del río. Una forma relajante de conectar con la naturaleza.</p>
+                    </div>
+                </div>
+                <div class="deporte-card">
+                    <img src="img/Torrentismo.png" alt="Torrentismo">
+                    <div class="card-content">
+                        <h3>Torrentismo</h3>
+                        <p>Atrévete a descender por una cascada usando cuerdas y equipo especializado. Una aventura vertical inolvidable.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <h3>Contacto</h3>
+        <p><strong>Teléfono:</strong> +57 310 123 4567</p>
+        <p><strong>Email:</strong> info@hotelcalifornia.com</p>
+        <p><strong>Dirección:</strong> Calle 10 # 5-22, San Gil, Santander, Colombia</p>
+    </footer>
+
+</body>
+</html>

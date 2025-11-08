@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Principal</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #242424; 
+            color: #f0f0f0;
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+        }
+
+        #portafolio {
+            padding: 80px 20px;
+            text-align: center;
+            background-color: #1e1e1e; 
+            width: 100%; 
+        }
+
+        #portafolio h2 {
+            font-size: 3em;
+            color: #d1b3ff; 
+            margin-bottom: 30px; 
+        }
+
+        .contenedor-proyectos {
+            display: flex; 
+            justify-content: center;
+            flex-wrap: wrap; 
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .proyecto-card {
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            width: 350px; 
+            height: 150px; 
+            text-decoration: none;
+            background-color: #333333; 
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: 1px solid #444;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .proyecto-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(209, 179, 255, 0.05), rgba(0, 0, 0, 0));
+            z-index: 0;
+        }
+
+        .proyecto-card:hover {
+            transform: translateY(-8px); 
+            box-shadow: 0 12px 30px rgba(187, 134, 252, 0.6); 
+            background-color: #3d3d3d; 
+        }
+
+        .titulo-proyecto {
+            font-size: 1.5em; 
+            color: #bb86fc; 
+            margin: 0; 
+            position: relative; 
+            padding-bottom: 10px;
+            z-index: 1; 
+        }
+
+        .titulo-proyecto::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80%; 
+            height: 2px;
+            background-color: #5a3d7e; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <section id="portafolio">
+        <h2>Mis Proyectos Principales</h2>
+
+        <div class="contenedor-proyectos">
+            
+            <a href="index2.html" class="proyecto-card">
+                <h3 class="titulo-proyecto">Proyecto 1: Factura</h3>
+            </a>
+
+            <a href="index3.html" class="proyecto-card">
+                <h3 class="titulo-proyecto">Proyecto 2: Página de Hotel</h3>
+            </a>
+            
+            <a href="index4.html" class="proyecto-card">
+                <h3 class="titulo-proyecto">Proyecto 3: Página de Juego Táctico</h3>
+            </a>
+
+        </div>
+    </section>
+
+</body>
+</html>

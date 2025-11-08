@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Breaking Point - Armas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1c1c1c; 
+            color: #d0d0d0; 
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow: hidden; 
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Roboto Condensed', sans-serif; 
+            text-transform: uppercase;
+            letter-spacing: 3px; 
+            color: #f0f0f0;
+            font-weight: 700;
+        }
+
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .main-title {
+            font-size: 3.5em; 
+            margin-bottom: 50px;
+            color: #f5f5f5;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background-color: #556b2f; 
+            box-shadow: 0 0 10px #556b2f;
+            border-radius: 2px;
+        }
+
+        .content-section {
+            padding: 0;
+        }
+        .feature-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+        .card {
+            background-color: #2a2a2a; 
+            border: 2px solid #556b2f; 
+            padding: 30px;
+            border-radius: 5px; 
+            width: 400px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background-color: #383838;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.9);
+        }
+        .card h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #7c9a51;
+        }
+        .card p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
+        .card .button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: #556b2f; 
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+        }
+        .card .button:hover {
+            background-color: #7c9a51; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9); 
+            align-items: center; 
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 40px; 
+            border: 3px solid #556b2f; 
+            width: 90%; 
+            max-width: 1300px; 
+            max-height: 90vh; 
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden; 
+        }
+        .close-button {
+            color: #d0d0d0;
+            position: absolute;
+            top: 15px;
+            right: 30px;
+            font-size: 40px;
+            font-weight: 300; 
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-button:hover, .close-button:focus {
+            color: #7c9a51;
+            text-decoration: none;
+        }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+            margin-top: 30px;
+            overflow-y: auto; 
+            max-height: calc(90vh - 120px); 
+            padding: 0 10px 20px 10px;
+            scrollbar-color: #556b2f #2a2a2a; 
+            scrollbar-width: thin;
+        }
+        .modal-gallery::-webkit-scrollbar {
+            width: 10px;
+        }
+        .modal-gallery::-webkit-scrollbar-track {
+            background: #2a2a2a;
+        }
+        .modal-gallery::-webkit-scrollbar-thumb {
+            background: #556b2f;
+            border-radius: 5px;
+        }
+
+        .gallery-item {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 5px;
+            border: 2px solid transparent; 
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 480px; 
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: #444;
+        }
+        .gallery-item.selected {
+            border-color: #7c9a51; 
+            box-shadow: 0 0 15px #7c9a51;
+            background-color: #282828;
+            transform: scale(1.03);
+        }
+        .gallery-item img {
+            width: 100%;
+            max-width: 250px; 
+            height: auto;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            object-fit: contain; 
+        }
+        .gallery-item h4 {
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            color: #7c9a51;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .stats-container {
+            width: 100%;
+            margin-top: 10px;
+            padding: 0 10px;
+            text-align: left;
+        }
+        .stat-bar {
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #d0d0d0;
+            margin-bottom: 3px;
+            font-family: 'Roboto Condensed', sans-serif;
+            letter-spacing: 1px;
+        }
+        .bar-wrapper {
+            background-color: #444;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 15px; 
+        }
+        .bar-fill {
+            height: 100%;
+            background-color: #556b2f; 
+            transition: width 0.5s ease;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            z-index: 1000;
+        }
+        .nav-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: #556b2f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+        .nav-button:hover {
+            background-color: #7c9a51;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
+        }
+        
+        @media (max-width: 1350px) {
+             .modal-content { max-width: 1000px; }
+        }
+        @media (max-width: 1100px) {
+            .modal-gallery {
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
+        @media (max-width: 800px) {
+            .main-content-wrapper { height: auto; min-height: 100vh; padding-top: 50px; }
+            .modal-content { max-width: 95%; padding: 20px; }
+            .modal-gallery {
+                grid-template-columns: 1fr; 
+                gap: 20px;
+                max-height: calc(90vh - 150px);
+            }
+             .gallery-item {
+                 min-height: auto;
+                 padding: 15px;
+             }
+            .card { width: 90%; }
+            .feature-cards { flex-direction: column; align-items: center; gap: 30px; }
+            .nav-buttons { flex-direction: column; gap: 15px; bottom: 20px; }
+        }
+    </style>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-content-wrapper">
+        <h2 class="main-title">Elige tu Arsenal</h2>
+        <div class="content-section">
+            <div class="container">
+                <div class="feature-cards">
+                    <div class="card">
+                        <h3>Armas Primarias</h3>
+                        <p>Selecciona tu pistola o explosivo para el combate cercano y la utilidad táctica. Solo puedes llevar uno.</p>
+                        <a href="#" class="button" onclick="openModal('primary')">Explorar</a>
+                    </div>
+                    <div class="card">
+                        <h3>Armas Secundarias</h3>
+                        <p>Elige un rifle, subfusil o escopeta para dominar el campo de batalla a media y larga distancia. Es tu arma principal.</p>
+                        <a href="#" class="button" onclick="openModal('secondary')">Explorar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="index.html" class="nav-button">← Inicio</a>
+        <a href="Vehiculos.html" class="nav-button">Siguiente →</a>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-gallery" class="modal-gallery">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const selectedWeapons = {
+            primary: null,
+            secondary: null
+        };
+
+        const weaponCategories = {
+            primary: {
+                title: 'Armas Primarias (Pistolas y Explosivos)',
+                weapons: [
+                    { name: 'Glock 17', id: 'glock17', image: 'Img-Vid/Glock-17.png', stats: { daño: 50, precisión: 70, manejo: 80, cargador: 60 } },
+                    { name: 'Desert Eagle', id: 'deserteagle', image: 'Img-Vid/DesertEagle.png', stats: { daño: 95, precisión: 55, manejo: 40, cargador: 20 } },
+                    { name: 'Beretta M9', id: 'berettam9', image: 'Img-Vid/BerettaM9.png', stats: { daño: 60, precisión: 75, manejo: 70, cargador: 50 } },
+                    { name: 'Granada M67', id: 'granadam67', image: 'Img-Vid/GranadaM67.png', stats: { daño: 100, alcance: 40, radio: 85, activación: 70 } },
+                    { name: 'Mina M18 Claymore', id: 'claymore', image: 'Img-Vid/Mina-M18-Claymore.png', stats: { daño: 100, alcance: 30, área: 90, sigilo: 65 } },
+                    { name: 'C4', id: 'c4', image: 'Img-Vid/C4.png', stats: { daño: 100, colocación: 50, activación: 95, impacto: 80 } }
+                ]
+            },
+            secondary: {
+                title: 'Armas Secundarias (Rifles, SMGs, etc.)',
+                weapons: [
+                    { name: 'AK-47', id: 'ak47', image: 'Img-Vid/AK-47.png', stats: { daño: 85, cadencia: 60, precisión: 50, retroceso: 45 } },
+                    { name: 'M4A1', id: 'm4a1', image: 'Img-Vid/M4A1.png', stats: { daño: 70, cadencia: 80, precisión: 75, retroceso: 60 } },
+                    { name: 'MP5', id: 'mp5', image: 'Img-Vid/MP5.png', stats: { daño: 55, cadencia: 90, precisión: 80, retroceso: 85 } },
+                    { name: 'Remington 870', id: 'remington870', image: 'Img-Vid/Remington870.png', stats: { daño: 95, cadencia: 20, precisión: 40, alcance: 30 } },
+                    { name: 'AWM', id: 'awm', image: 'Img-Vid/AWM.png', stats: { daño: 100, precisión: 95, manejo: 30, alcance: 90 } },
+                    { name: 'M24 SWS', id: 'm24sws', image: 'Img-Vid/M24-SWS.png', stats: { daño: 90, precisión: 85, manejo: 40, alcance: 85 } },
+                ]
+            }
+        };
+
+        function createStatsHTML(stats) {
+            let html = '<div class="stats-container">';
+
+            for (const statName in stats) {
+                const statValue = stats[statName];
+                const displayName = statName.charAt(0).toUpperCase() + statName.slice(1); 
+                
+                html += `
+                    <div class="stat-bar">
+                        <span class="stat-label">
+                            ${displayName}
+                            <span>${statValue} / 100</span> </span>
+                        <div class="bar-wrapper">
+                            <div class="bar-fill" style="width: ${statValue}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function openModal(category) {
+            const modal = document.getElementById('myModal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalGallery = document.getElementById('modal-gallery');
+            
+            const categoryData = weaponCategories[category];
+            if (!categoryData) return;
+
+            modalTitle.textContent = categoryData.title;
+            modalGallery.innerHTML = '';
+
+            const weaponsToShow = categoryData.weapons; 
+
+            weaponsToShow.forEach(weapon => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                
+                const statsHtml = createStatsHTML(weapon.stats);
+
+                galleryItem.innerHTML = `
+                    <img src="${weapon.image}" alt="${weapon.name}" onerror="this.src='https://via.placeholder.com/400x250/383838/FFFFFF?text=Imagen+de+${weapon.name}+no+encontrada'">
+                    <h4>${weapon.name}</h4>
+                    ${statsHtml}
+                `;
+
+                if (selectedWeapons[category] && selectedWeapons[category].id === weapon.id) {
+                    galleryItem.classList.add('selected');
+                }
+
+                galleryItem.addEventListener('click', () => {
+                    const allItems = modalGallery.querySelectorAll('.gallery-item');
+                    allItems.forEach(item => item.classList.remove('selected'));
+                    
+                    galleryItem.classList.add('selected');
+                    selectedWeapons[category] = weapon;
+                });
+                
+                modalGallery.appendChild(galleryItem);
+            });
+
+            modal.style.display = "flex"; 
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+    
+</body>
+</html>

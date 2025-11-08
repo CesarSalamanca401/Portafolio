@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Breaking Point - Vehículos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1c1c1c; 
+            color: #d0d0d0; 
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow: hidden; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; 
+        }
+
+        .container {
+            max-width: 1400px; 
+            width: 95%; 
+            margin: 0 auto;
+            padding: 10px 0; 
+            text-align: center;
+            flex-grow: 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Roboto Condensed', sans-serif; 
+            text-transform: uppercase;
+            letter-spacing: 3px; 
+            color: #f0f0f0;
+            font-weight: 700;
+        }
+
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            padding: 20px 20px 0; 
+            box-sizing: border-box;
+            flex-shrink: 0; 
+        }
+        
+        .main-title {
+            font-size: 3.5em; 
+            margin-bottom: 30px; 
+            color: #f5f5f5;
+            position: relative;
+        }
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background-color: #556b2f; 
+            box-shadow: 0 0 10px #556b2f;
+            border-radius: 2px;
+        }
+
+        .vehicle-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px; 
+            width: 100%;
+            max-height: calc(100vh - 200px); 
+            overflow: hidden; 
+        }
+        
+        .vehicle-card {
+            background-color: #222222; 
+            border: 2px solid #444;
+            border-radius: 5px; 
+            padding: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 270px; 
+            justify-content: space-between; 
+        }
+        
+        .vehicle-card:hover {
+            transform: translateY(-5px) scale(1.01); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+            border-color: #556b2f; 
+        }
+        
+        .vehicle-card.selected {
+            border: 3px solid #7c9a51; 
+            box-shadow: 0 0 15px rgba(124, 154, 81, 0.8); 
+            background-color: #282828;
+            transform: scale(1.02);
+        }
+        
+        .vehicle-card img {
+            width: 90%; 
+            max-height: 80px; 
+            object-fit: contain;
+            border-radius: 3px; 
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+        
+        .vehicle-card h3 {
+            font-size: 1.3em; 
+            margin-bottom: 10px; 
+            color: #7c9a51; 
+            flex-shrink: 0;
+        }
+
+        .stats-container {
+            width: 100%;
+            margin-top: 5px; 
+            padding: 0 5px;
+            text-align: left;
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; 
+        }
+        .stat-bar {
+            margin-bottom: 8px;
+            font-size: 0.8em; 
+        }
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #d0d0d0;
+            margin-bottom: 2px; 
+            font-family: 'Roboto Condensed', sans-serif;
+            letter-spacing: 1px;
+        }
+        .stat-label span {
+            color: #7c9a51; 
+        }
+        .bar-wrapper {
+            background-color: #444;
+            border-radius: 5px; 
+            overflow: hidden;
+            height: 8px; 
+        }
+        .bar-fill {
+            height: 100%;
+            background-color: #556b2f; 
+            transition: width 0.5s ease;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+
+        .nav-buttons {
+            position: relative; 
+            margin-top: 20px; 
+            display: flex;
+            gap: 40px; 
+            padding-bottom: 20px; 
+            flex-shrink: 0; 
+            z-index: 10;
+        }
+        
+        .nav-button {
+            display: inline-block;
+            padding: 15px 40px; 
+            background-color: #556b2f; 
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); 
+            font-size: 1em; 
+        }
+        
+        .nav-button:hover {
+            background-color: #7c9a51; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 1300px) {
+            .vehicle-gallery {
+                grid-template-columns: repeat(3, 1fr); 
+            }
+            .vehicle-card {
+                 min-height: 290px;
+            }
+        }
+        @media (max-width: 992px) {
+            .vehicle-gallery {
+                grid-template-columns: repeat(2, 1fr);
+                max-height: calc(100vh - 200px);
+                overflow-y: auto; 
+                padding-right: 10px;
+            }
+            .vehicle-card {
+                min-height: auto;
+            }
+        }
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5em;
+                margin-bottom: 20px;
+            }
+            .vehicle-gallery {
+                grid-template-columns: 1fr; 
+                gap: 15px;
+                max-height: calc(100vh - 180px); 
+                overflow-y: auto; 
+            }
+            .vehicle-card {
+                width: 90%;
+                margin: 0 auto;
+                padding: 15px;
+            }
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+                padding-bottom: 20px;
+            }
+        }
+        @media (max-height: 700px) { 
+            .vehicle-gallery {
+                max-height: calc(100vh - 140px);
+                overflow-y: auto;
+            }
+        }
+    </style>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-content-wrapper">
+        <h2 class="main-title">Vehículos Tácticos</h2>
+        <div class="container">
+            <div class="vehicle-gallery" id="vehicle-gallery">
+                </div>
+        </div>
+    </div>
+    
+    <div class="nav-buttons">
+        <a href="armas.html" class="nav-button">← Anterior</a>
+        <a href="roles.html" class="nav-button">Siguiente →</a>
+    </div>
+
+    <script>
+        const vehicleData = [
+            { id: 'humvee', name: 'Humvee', image: 'Vehiculos/Humvee.png', stats: { blindaje: 40, 'velocidad máxima': 65, 'poder de fuego': 30, movilidad: 70 } },
+            { id: 'apc', name: 'Transporte Blindado', image: 'Vehiculos/TransporteBlindado.png', stats: { blindaje: 85, 'velocidad máxima': 45, 'poder de fuego': 55, movilidad: 50 } },
+            { id: 'tank', name: 'Tanque de Combate', image: 'Vehiculos/Tanque.png', stats: { blindaje: 100, 'velocidad máxima': 30, 'poder de fuego': 95, movilidad: 25 } },
+            { id: 'attack-heli', name: 'Helicóptero de Ataque', image: 'Vehiculos/Helicoptero.png', stats: { blindaje: 60, 'velocidad máxima': 80, 'poder de fuego': 90, movilidad: 75 } },
+            { id: 'transport-heli', name: 'Helicóptero de Transporte', image: 'Vehiculos/HelicopteroT.png', stats: { blindaje: 50, 'velocidad máxima': 75, 'poder de fuego': 25, movilidad: 60 } },
+            { id: 'motocicleta', name: 'Motocicleta', image: 'Vehiculos/Motocicleta.png', stats: { blindaje: 10, 'velocidad máxima': 100, 'poder de fuego': 10, movilidad: 95 } },
+            { id: 'buggy', name: 'Buggy', image: 'Vehiculos/Buggy.png', stats: { blindaje: 25, 'velocidad máxima': 90, 'poder de fuego': 40, movilidad: 85 } },
+            { id: 'camioneta', name: 'Camioneta', image: 'Vehiculos/Camion.png', stats: { blindaje: 70, 'velocidad máxima': 50, 'poder de fuego': 35, movilidad: 60 } },
+        ];
+
+        let selectedVehicle = null;
+
+
+        function createStatsHTML(stats) {
+            let html = '<div class="stats-container">';
+            for (const statName in stats) {
+                const statValue = stats[statName];
+                const displayName = statName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                
+                html += `
+                    <div class="stat-bar">
+                        <span class="stat-label">
+                            ${displayName}
+                            <span>${statValue} / 100</span>
+                        </span>
+                        <div class="bar-wrapper">
+                            <div class="bar-fill" style="width: ${statValue}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function renderVehicles() {
+            const gallery = document.getElementById('vehicle-gallery');
+            gallery.innerHTML = ''; 
+
+            vehicleData.forEach(vehicle => {
+                const statsHtml = createStatsHTML(vehicle.stats);
+                
+                const card = document.createElement('div');
+                card.className = 'vehicle-card';
+                card.setAttribute('data-vehicle', vehicle.id);
+
+                card.innerHTML = `
+                    <img src="${vehicle.image}" alt="${vehicle.name}" onerror="this.src='https://via.placeholder.com/400x120/383838/FFFFFF?text=${vehicle.name.replace(/\s/g, '+')}'">
+                    <h3>${vehicle.name}</h3>
+                    ${statsHtml}
+                `;
+                
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.vehicle-card').forEach(otherCard => {
+                        otherCard.classList.remove('selected');
+                    });
+
+                    card.classList.add('selected');
+                    selectedVehicle = vehicle;
+                    localStorage.setItem('selectedVehicle', vehicle.id);
+                    console.log('Vehículo seleccionado:', selectedVehicle.name);
+                });
+
+                gallery.appendChild(card);
+            });
+                        const storedVehicleId = localStorage.getItem('selectedVehicle');
+            if (storedVehicleId) {
+                const selectedCard = gallery.querySelector(`[data-vehicle="${storedVehicleId}"]`);
+                if (selectedCard) {
+                    selectedCard.classList.add('selected');
+                    selectedVehicle = vehicleData.find(v => v.id === storedVehicleId);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderVehicles);
+    </script>
+    
+</body>
+</html>
