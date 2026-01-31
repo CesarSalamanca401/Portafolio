@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #pokedex-container {
+            display: flex; 
+            margin-top: 30px;
+            align-items: flex-start; 
+            justify-content: center; 
+            width: 100%;
+            flex-wrap: wrap; 
+        }
+
+        #image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 40px; 
+            margin-bottom: 20px; 
+        }
+
+        #img {
+            max-width: 400px; 
+            height: auto;
+            border: 5px solid #000000;
+            border-radius: 10px;
+            background-color: #ffffff; 
+            background-image: none; 
+            padding: 10px;
+            transition: background-color 0.5s ease, background-image 0.5s ease; 
+        }
+
+        #nombre {
+            text-align: center;
+            font-size: 2.2em; 
+            margin-bottom: 15px;
+        }
+
+        #stats-container {
+            border: 3px solid #000000; 
+            border-radius: 10px;
+            padding: 20px 30px; 
+            background-color: #f8f8f8; 
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); 
+            max-width: 500px; 
+            width: 100%; 
+        }
+
+        #stats-container h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.3em;
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 5px;
+        }
+
+        #stats-container h3 {
+            margin: 8px 0 2px 0; 
+            font-size: 1.1em;
+        }
+
+        .base-stat {
+            font-weight: bold;
+            color: black; 
+        }
+
+        .colored-type-text {
+            font-weight: bold;
+        }
+        
+        .stat-bar-wrapper {
+            margin-bottom: 10px; 
+            max-width: 280px; 
+            margin-left: 10px; 
+        }
+        
+        .stat-bar {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 15px;
+            width: 100%; 
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokedex</h1>
+    
+    <div style="text-align: center; margin-bottom: 20px;">
+        <input id="pok" type="text" placeholder="Escriba el nombre o número de Pokémon">
+        <button onclick="traer()">Buscar</button>
+    </div>
+    
+    <div id="pokedex-container">
+        <div id="image-wrapper">
+            <h2 id="nombre"></h2>
+            <img id="img" alt="Imagen del Pokémon">
+        </div>
+
+        <div id="stats-container">
+            <h3>ID: # <span id="numero"></span></h3>
+            
+            <h2>Estadísticas Base:</h2>
+            <h3 id="vida"></h3> 
+            <div id="vida-bar" class="stat-bar-wrapper"></div> 
+            
+            <h3 id="ataque"></h3>
+            <div id="ataque-bar" class="stat-bar-wrapper"></div>
+            
+            <h3 id="defensa"></h3>
+            <div id="defensa-bar" class="stat-bar-wrapper"></div>
+            
+            <h3 id="AtaqueEspecial"></h3>
+            <div id="AtaqueEspecial-bar" class="stat-bar-wrapper"></div>
+            
+            <h3 id="DefensaEspecial"></h3>
+            <div id="DefensaEspecial-bar" class="stat-bar-wrapper"></div>
+            
+            <h3 id="velocidad"></h3>
+            <div id="velocidad-bar" class="stat-bar-wrapper"></div>
+            
+            <h2>Detalles:</h2>
+            <h3 id="Tipo"></h3>
+            <h3 id="altura"></h3>
+            <h3 id="peso"></h3>
+
+            <h2>Debilidades:</h2>
+            <h3 id="debilidades"></h3> 
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const TYPE_COLORS = {
+            normal: '#A8A878', fire: '#F08030', water: '#6890F0', grass: '#78C850',
+            electric: '#F8D030', ice: '#98D8D8', fighting: '#C03028', poison: '#A040A0',
+            ground: '#E0C068', flying: '#A890F0', psychic: '#F85888', bug: '#A8B820',
+            rock: '#B8A038', ghost: '#705898', dragon: '#7038F8', steel: '#B8B8D0',
+            dark: '#705848', fairy: '#EE99AC', unknown: '#68A090', shadow: '#5A514B'
+        };
+
+        const MAX_BASE_STAT = 255; 
+
+        function getStatBarHtml(value, color) {
+            const percentage = (value / MAX_BASE_STAT) * 100;
+            const safePercentage = Math.min(percentage, 100); 
+
+            return `
+                <div class="stat-bar" title="Máx. Referencia: ${MAX_BASE_STAT}">
+                    <div class="stat-fill" style="width: ${safePercentage}%; background-color: ${color}"></div>
+                </div>
+            `;
+        }
+
+        function formatStatText(name, value) {
+            return `${name}: <span class="base-stat">${value}/${MAX_BASE_STAT}</span>`;
+        }
+
+        function capitalize(s) {
+            if (!s) return s;
+            return s.split(/[,/]\s*/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ').replace(/, \//g, '/');
+        }
+
+        async function traer() {
+            let pokemonInput = document.getElementById("pok").value.toLowerCase().trim();
+
+            if (!pokemonInput) {
+                alert("Por favor, introduce el nombre o número del Pokémon.");
+                return;
+            }
+
+            const imgElement = document.getElementById("img");
+
+            imgElement.style.backgroundColor = '#ffffff';
+            imgElement.style.backgroundImage = 'none';
+
+            try {
+                let resPokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonInput}`);
+                let data = resPokemon.data;
+                
+                const types = data.types.map(t => t.type.name);
+                const typeColors = types.map(type => TYPE_COLORS[type] || '#CCCCCC');
+                const primaryColor = typeColors[0];
+
+                if (types.length > 1) {
+                    const secondaryColor = typeColors[1];
+                    imgElement.style.backgroundImage = `linear-gradient(45deg, ${primaryColor} 50%, ${secondaryColor} 50%)`;
+                    imgElement.style.backgroundColor = 'transparent'; 
+                } else {
+                    imgElement.style.backgroundColor = primaryColor; 
+                    imgElement.style.backgroundImage = 'none'; 
+                }
+
+                document.getElementById("nombre").textContent = capitalize(data.name);
+                imgElement.src = data.sprites.other["official-artwork"]["front_default"];
+                document.getElementById("numero").textContent = data.id;
+
+                const stats = [
+                    { name: "Vida (HP)", id: "vida", barId: "vida-bar", value: data.stats[0].base_stat },
+                    { name: "Ataque", id: "ataque", barId: "ataque-bar", value: data.stats[1].base_stat },
+                    { name: "Defensa", id: "defensa", barId: "defensa-bar", value: data.stats[2].base_stat },
+                    { name: "Ataque Especial", id: "AtaqueEspecial", barId: "AtaqueEspecial-bar", value: data.stats[3].base_stat },
+                    { name: "Defensa Especial", id: "DefensaEspecial", barId: "DefensaEspecial-bar", value: data.stats[4].base_stat },
+                    { name: "Velocidad", id: "velocidad", barId: "velocidad-bar", value: data.stats[5].base_stat }
+                ];
+
+                stats.forEach(stat => {
+                    document.getElementById(stat.id).innerHTML = formatStatText(stat.name, stat.value);
+                    document.getElementById(stat.barId).innerHTML = getStatBarHtml(stat.value, primaryColor); 
+                });
+
+                const coloredTypes = types.map(type => 
+                    `<span class="colored-type-text" style="color: ${TYPE_COLORS[type] || 'black'}">${capitalize(type)}</span>`
+                ).join('/');
+                document.getElementById("Tipo").innerHTML = `Tipo: ${coloredTypes}`;
+
+                document.getElementById("altura").innerHTML = `Altura: <span class="base-stat">${data.height / 10} m</span>`;
+                document.getElementById("peso").innerHTML = `Peso: <span class="base-stat">${data.weight / 10} kg</span>`;
+
+                const typeUrl = data.types[0].type.url; 
+                let resType = await axios.get(typeUrl);
+                let typeData = resType.data;
+
+                const weaknesses = typeData.damage_relations.double_damage_from.map(d => d.name);
+                
+                const coloredWeaknesses = weaknesses.map(weaknessType => 
+                    `<span class="colored-type-text" style="color: ${TYPE_COLORS[weaknessType] || 'black'}">${capitalize(weaknessType)}</span>`
+                ).join(', ');
+
+                document.getElementById("debilidades").innerHTML = `Vulnerable a: ${coloredWeaknesses || "Ninguna conocida"}`;
+
+            } catch (error) {
+                console.error("Error al buscar el Pokémon o sus debilidades:", error);
+                alert("¡Pokémon no encontrado! Revisa el nombre o número.");
+
+                document.getElementById("nombre").textContent = "Pokémon no encontrado";
+                imgElement.src = "";
+                imgElement.style.backgroundColor = '#ffffff'; 
+                imgElement.style.backgroundImage = 'none';
+                document.getElementById("numero").textContent = "";
+                
+                ["vida", "ataque", "defensa", "AtaqueEspecial", "DefensaEspecial", "velocidad"].forEach(id => {
+                    document.getElementById(id).innerHTML = "";
+                    const barElement = document.getElementById(`${id}-bar`);
+                    if (barElement) barElement.innerHTML = "";
+                });
+
+                document.getElementById("Tipo").innerHTML = ""; 
+                document.getElementById("altura").innerHTML = ""; 
+                document.getElementById("peso").innerHTML = ""; 
+                document.getElementById("debilidades").innerHTML = ""; 
+            }
+        }
+
+    </script>
+</body>
+</html>
