@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookware Shop</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #e9e9e9; 
+            color: #444;
+        }
+
+        a {
+            text-decoration: none;
+            color: #444;
+        }
+
+        .top-bar {
+            background: #f0f0f0; 
+            color: #666;
+            font-size: 11px;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+        .top-bar a {
+            color: #666;
+            margin: 0 8px;
+        }
+
+        .main-header {
+            background: #fff; 
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid #f7f7f7; 
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #444;
+            text-transform: uppercase;
+        }
+        .search {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 40px;
+        }
+        .search input {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            background: #fff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .search button {
+            padding: 8px 15px;
+            border: none;
+            background: #bebebe; 
+            color: #444;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .header-right a {
+            color: #444;
+        }
+        .cart {
+            font-size: 14px;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            background: #f5f5f5;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .container {
+            display: flex;
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            gap: 20px;
+        }
+
+        aside {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        
+        aside h3 {
+            background: #333; 
+            color: white;
+            padding: 8px 15px;
+            margin: 0 0 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: normal;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            background: linear-gradient(to bottom, #505050 0%, #3a3a3a 100%);
+        }
+
+        aside ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        aside ul li {
+            background: #f9f9f9;
+            color: #444;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-top: none; 
+            margin-bottom: 0;
+            cursor: pointer;
+            font-size: 13px;
+            box-shadow: none;
+            border-radius: 0;
+            background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%);
+            position: relative;
+        }
+        aside ul li:first-child {
+            border-top: 1px solid #ddd; 
+        }
+        aside ul li:hover {
+            background: linear-gradient(to bottom, #e5e5e5 0%, #d5d5d5 100%);
+        }
+        aside ul li:first-child::after { 
+            content: '»';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #444;
+        }
+
+        aside .product {
+            background: #fff;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        aside .product img {
+            max-width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+        aside .product.special-sidebar .product-name {
+            font-size: 11px;
+            color: #555;
+            margin: 5px 0 10px;
+            line-height: 1.3;
+        }
+        aside .product.special-sidebar .price-details {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+        }
+        aside .product.special-sidebar .current-price {
+            font-weight: bold;
+            font-size: 16px;
+            color: #444;
+        }
+        aside .product.special-sidebar .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        aside .product.special-sidebar .discount {
+            background: #d9534f;
+            color: white;
+            padding: 2px 5px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        aside .product.special-offer-box { 
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 0;
+            text-align: left;
+            position: relative; 
+            overflow: hidden;
+        }
+        aside .product.special-offer-box h3 {
+            background: #2c2c2c;
+            color: #fff;
+            padding: 10px 15px;
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        aside .product.special-offer-box p {
+            padding: 5px 15px 0;
+            margin: 0;
+            font-size: 14px;
+            text-align: center; 
+        }
+        aside .product.special-offer-box img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin: 10px 0 0 0; 
+            border: none;
+            display: block; 
+        }
+        aside .product.special-offer-box button {
+            position: absolute; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: #bebebe;
+            color: #444;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 10; 
+        }
+        aside .product.special-offer-box button:hover {
+            background: #a3a3a3;
+        }
+        .view-all-specials {
+            display: block;
+            text-align: right;
+            font-size: 11px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        .hero-image-container {
+            background: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+        .hero-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 250px; 
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+            margin-bottom: 20px;
+        }
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            min-height: 200px; 
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .category-item img {
+            max-width: 100%;
+            height: 120px; 
+            object-fit: contain;
+            margin-bottom: 5px;
+            flex-grow: 1;
+        }
+        .category-button {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 5px 10px;
+            cursor: pointer;
+            position: relative;
+            color: #444;
+            font-size: 12px;
+            font-weight: bold;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+            box-sizing: border-box;
+        }
+        .category-button:hover {
+            background: #e5e5e5;
+        }
+        .category-button::after {
+            content: '»';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #444;
+        }
+
+        /* Featured Bar */
+        .featured-bar {
+            background: #333;
+            color: white;
+            padding: 8px 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Featured Products Grid */
+        .featured, .special-offers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .product { /* General product card style */
+            background: #fff;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .product img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .product p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .product .price {
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #444;
+            font-size: 16px;
+        }
+        .product .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        .product .discount {
+            color: #d9534f;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Sale Sticker */
+        .sale-sticker {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #d9534f;
+            color: white;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Add to Cart Button */
+        .add-to-cart-btn {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: #444;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .add-to-cart-btn:hover {
+            background: #e5e5e5;
+        }
+        .add-to-cart-btn::before {
+            content: '🛒';
+            font-size: 14px;
+        }
+
+        /* Special Offers Section (Lower 3 Cards) */
+        .special-offer-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 0;
+            text-align: left;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .special-offer-card h3 {
+            font-size: 16px;
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            margin: 0;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .special-offer-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin: 0;
+            margin-bottom: 5px;
+        }
+        .special-offer-card p {
+            font-size: 12px;
+            color: #555;
+            margin: 10px 15px;
+            text-align: left;
+            text-transform: none;
+        }
+
+
+        /* --- Footer --- */
+        footer {
+            background: #f0f0f0;
+            color: #444;
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 3px solid #ddd;
+        }
+        footer div {
+            width: 20%;
+            padding: 0 10px;
+        }
+        footer h4 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        footer div:last-child p { 
+            font-size: 14px; 
+            font-weight: bold; 
+            margin: 5px 0;
+        }
+
+
+        /* --- MEDIA QUERIES --- */
+        
+        @media (max-width: 1250px) {
+            .container {
+                width: 98%;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            aside {
+                width: 90%;
+            }
+            main {
+                width: 90%;
+            }
+            .categories, .featured, .special-offers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .search {
+                margin: 0 20px;
+            }
+            .search input {
+                width: 200px;
+            }
+            footer {
+                flex-wrap: wrap;
+            }
+            footer div {
+                width: 45%;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-header {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .search {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            .categories, .featured, .special-offers-grid {
+                grid-template-columns: 1fr;
+            }
+            .container, aside, main {
+                width: 95%;
+                margin: 10px auto;
+            }
+            .hero-image-container img {
+                max-height: 200px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            footer {
+                flex-direction: column;
+            }
+            footer div {
+                width: 90%;
+                text-align: center;
+            }
+            aside .product.special-offer-box button {
+                position: relative; 
+                bottom: auto;
+                left: auto;
+                transform: none;
+                margin: 10px auto;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div>
+            <a href="#">Contact</a> |
+            <a href="#">Sitemap</a>
+        </div>
+        <div>
+            <a href="#">Language: English</a> |
+            <a href="#">Currency: USD</a>
+        </div>
+    </div>
+    <div class="main-header">
+        <div class="logo">Cookware</div>
+        
+        <div class="search">
+            <input type="text" placeholder="Search products...">
+            <button>Search</button>
+        </div>
+
+        <div class="header-right">
+            <a href="#">👤 Your Account</a>
+            <a href="#">💳 Checkout</a>
+            <div class="cart">🛒 **(0)**</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside>
+            <h3>Categories</h3>
+            <ul>
+                <li>Cookware</li>
+                <li>Cook Tools</li>
+                <li>Cutlery</li>
+                <li>Electrics</li> 
+                <li>Bakeware</li>
+                <li>Tabletop</li>
+                <li>Bar</li>
+                <li>Housekeeping</li>
+                <li>Outdoor</li>
+            </ul>
+
+            <h3>Specials</h3>
+            <div class="product special-sidebar">
+                <img src="imgss/Special.png" alt="Special Product">
+                <p class="product-name">Baguette Lima Electronic Kitchen Scale and</p>
+                <div class="price-details">
+                    <span class="current-price">$13.74</span>
+                    <span class="old-price">$16.10</span>
+                    <span class="discount">-15%</span>
+                </div>
+            </div>
+            <a href="#" class="view-all-specials">VIEW ALL SPECIALS</a>
+
+            <div class="product special-offer-box"> 
+                <h3>Special offer!</h3>
+                <p>Save up to 30%</p>
+                <p>on Cooking utensils</p>
+                <img src="imgss/SpecialOffer.png" alt="Special offer">
+                <button>Shop Now</button>
+            </div>
+        </aside>
+
+        <main>
+            <div class="hero-image-container">
+                <img src="imgss/LargeCookwareSet.png" alt="Large Cookware Set">
+            </div>
+
+            <div class="categories">
+                <div class="category-item">
+                    <img src="imgss/CookwareSet.png" alt="Cookware Sets">
+                    <div class="category-button">Cookware Sets</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/CookingUtensils.png" alt="Cooking Utensils">
+                    <div class="category-button">Cooking Utensils</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/Ovenware.png" alt="Ovenware">
+                    <div class="category-button">Ovenware</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/GrillPans&Griddles.png" alt="Grill Pans & Griddles">
+                    <div class="category-button">Grill Pans & Griddles</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/Roaster.png" alt="Roasters">
+                    <div class="category-button">Roasters</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/Woks.png" alt="Woks">
+                    <div class="category-button">Woks</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/Saucepans.png" alt="Saucepans">
+                    <div class="category-button">Saucepans</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/DutchOvens.png" alt="Dutch Ovens">
+                    <div class="category-button">Dutch Ovens</div>
+                </div>
+                <div class="category-item">
+                    <img src="imgss/Knives.png" alt="Knives">
+                    <div class="category-button">Knives</div>
+                </div>
+            </div>
+
+            <div class="featured-bar">Featured products</div>
+            <div class="featured">
+                <div class="product">
+                    <div class="sale-sticker">SALE</div>
+                    <img src="imgss/MixingBowl.png" alt="Mixing Bowl">
+                    <p>BAGUETTE LIMA ELECTRONIC KITCHEN SCALE AND</p>
+                    <p class="price"><span class="old-price">$91.19</span> $86.95 <span class="discount">-5%</span></p>
+                    <a href="#" class="add-to-cart-btn">ADD TO CART</a>
+                </div>
+                <div class="product">
+                    <img src="imgss/CoffeeMaker.png" alt="Coffee Maker">
+                    <p>COFFEE MACHINE KALORIK AZTEC</p>
+                    <p class="price">$173.15</p>
+                    <a href="#" class="add-to-cart-btn">ADD TO CART</a>
+                </div>
+                <div class="product">
+                    <img src="imgss/SiliconeOvenMitt.png" alt="Silicone Oven Mitt">
+                    <p>L'ORNA BADDIE MINI CADDY</p>
+                    <p class="price">$11.25</p>
+                    <a href="#" class="add-to-cart-btn">ADD TO CART</a>
+                </div>
+                <div class="product">
+                    <div class="sale-sticker">SALE</div>
+                    <img src="imgss/PressureCooker.png" alt="Pressure Cooker">
+                    <p>TOTAL JAMIE OLIVER PRESSURE COOKER AND</p>
+                    <p class="price"><span class="old-price">$54.56</span> $52.36 <span class="discount">-3%</span></p>
+                    <a href="#" class="add-to-cart-btn">ADD TO CART</a>
+                </div>
+                <div class="product">
+                    <img src="imgss/KitchenScale.png" alt="Kitchen Scale">
+                    <p>MECHANICAL KITCHEN SCALES</p>
+                    <p class="price">$24.15</p>
+                    <a href="#" class="add-to-cart-btn">ADD TO CART</a>
+                </div>
+                <div class="product">
+                    <img src="imgss/CopperPan.png" alt="Copper Pan">
+                    <p>RACOONS, HOMEMADE COPPER AND STAINLESS</p>
+                    <p class="price">$64.15</p>
+                    <a href="#" class="add-to-cart-btn">ADD TO CART</a>
+                </div>
+            </div>
+            
+            <div class="special-offers-grid">
+                <div class="special-offer-card">
+                    <h3>Special offer!</h3>
+                    <img src="imgss/EspecialOffer.png" alt="Special offer set 1">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                </div>
+                <div class="special-offer-card">
+                    <h3>Special offer!</h3>
+                    <img src="imgss/EspecialOffer2.png" alt="Special offer set 2">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                </div>
+                <div class="special-offer-card">
+                    <h3>Special offer!</h3>
+                    <img src="imgss/EspecialOffer3.png" alt="Special offer set 3">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div>
+            <h4>Information</h4>
+            <p>Delivery</p>
+            <p>Legal Notice</p>
+            <p>Terms and Conditions</p>
+            <p>About Us</p>
+            <p>Contact Us</p>
+            <p>Sitemap</p>
+        </div>
+        <div>
+            <h4>Categories</h4>
+            <p>Cookware</p>
+            <p>Cutlery</p>
+            <p>Cook Tools</p>
+        </div>
+        <div>
+            <h4>Follow us</h4>
+            <p>Facebook</p>
+            <p>Twitter</p>
+            <p>RSS</p>
+        </div>
+        <div>
+            <h4>Cookware</h4>
+            <p>Your Company Address</p>
+            <p>Email: info@cookware.com</p>
+        </div>
+    </footer>
+</body>
+</html>
