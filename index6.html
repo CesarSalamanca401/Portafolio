@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Cuenta de Restaurante</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Calculadora de Cuenta de Restaurante</h1>
+        <label for="subtotal">Subtotal de la Comida ($):</label>
+        <input type="number" id="subtotal" min="0" value="0" step="0.01" oninput="calcularTotal()">
+        <div class="radio-group">
+            <p>Seleccione Tipo de Socio (Descuento):</p>
+            <label>
+                <input type="radio" name="descuento" value="0" checked onchange="calcularTotal()">
+                No Socio (0%)
+            </label>
+            <label>
+                <input type="radio" name="descuento" value="0.05" onchange="calcularTotal()">
+                Socio Estándar (5%)
+            </label>
+            <label>
+                <input type="radio" name="descuento" value="0.12" onchange="calcularTotal()">
+                Socio Premium (12%)
+            </label>
+        </div>
+
+        <div id="resultado" class="result">
+            <p><strong>Resultados del Cálculo:</strong></p>
+            <p>Propina (10%): <span id="propina"> $ 0.00</span></p>
+            <p>IVA (11%): <span id="iva"> $ 0.00</span></p>
+            <p>Descuento Aplicado: <span id="descuento-aplicado"> $ 0.00</span></p>
+            <p class="total-final">Total Final a Pagar: <span id="total-final"> $ 0.00</span></p>
+        </div>
+    </div>
+
+    <script>
+        function calcularTotal() {
+            const subtotalInput = document.getElementById('subtotal');
+            let subtotal = parseFloat(subtotalInput.value);
+            if (isNaN(subtotal) || subtotal < 0) {
+                subtotal = 0;
+                subtotalInput.value = subtotal.toFixed(2);
+            }
+
+            const TASA_PROPINA = 0.10;
+            const TASA_IVA = 0.11;
+
+            const descuentoRadios = document.getElementsByName('descuento');
+            let tasaDescuento = 0;
+            for (const radio of descuentoRadios) {
+                if (radio.checked) {
+                    tasaDescuento = parseFloat(radio.value);
+                    break;
+                }
+            }
+
+            const propina = subtotal * TASA_PROPINA;
+            const iva = subtotal * TASA_IVA;
+            const descuento = subtotal * tasaDescuento;
+
+            const totalFinal = subtotal + propina + iva - descuento;
+            document.getElementById('propina').textContent = '$ ' + propina.toFixed(2);
+            document.getElementById('iva').textContent = '$ ' + iva.toFixed(2);
+            document.getElementById('descuento-aplicado').textContent = '$ ' + descuento.toFixed(2);
+            document.getElementById('total-final').textContent = '$ ' + totalFinal.toFixed(2);
+        }
+    </script>
+
+</body>
+
+</html>
